@@ -247,6 +247,13 @@
 
   /* ABOUT / TRUST */
   .about { display: block; }
+  .about.about-with-photo { display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; }
+  .portrait { display: flex; flex-direction: column; gap: 12px; }
+  .portrait img {
+    width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: center 15%;
+    border: 1px solid var(--line); background: var(--surface); display: block;
+  }
+  .portrait-tag { font-size: 11px; letter-spacing: 0.06em; color: var(--ink-soft); text-align: center; }
   .about-figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .figure { border-top: 1px solid var(--line); padding-top: 14px; }
   .figure .num { font-family: 'IBM Plex Mono', monospace; font-size: 26px; color: var(--accent); }
@@ -269,6 +276,8 @@
     .cart-row { flex-wrap: wrap; }
     .cart-info { min-width: 140px; }
     .cart-summary { margin-left: 0; max-width: none; }
+    .about.about-with-photo { grid-template-columns: 1fr; }
+    .portrait { max-width: 200px; margin: 0 auto; }
     .hero { grid-template-columns: 1fr; }
     .hero-text { align-items: center; text-align: center; }
     .hero-tags { justify-content: center; }
@@ -582,20 +591,9 @@
   <div class="wrap" style="padding-bottom:96px;">
     <div class="ticket">
       <div class="ticket-main">
-        <div class="field-row">
-          <div class="field"><label>Name</label><input placeholder="Jordan Lee"></div>
-          <div class="field"><label>Email</label><input placeholder="you@email.com"></div>
-        </div>
-        <div class="field-row">
-          <div class="field">
-            <label>Size</label>
-            <select><option>Small — $50</option><option>Medium — $100</option><option>Large — $150</option><option>XL — $200</option><option>Custom</option></select>
-          </div>
-        </div>
-        <div class="field"><label>Ideal deadline</label><input placeholder="Flexible, or a specific date"></div>
-        <div class="field"><label>Describe what you'd like</label><textarea rows="4" placeholder="Subject, mood, colors, must-haves..."></textarea></div>
-        <div class="field"><label>Style references (optional)</label><div class="upload">Drop images here or click to upload</div></div>
-        <a href="#" class="btn btn-primary" style="align-self:flex-start;">Submit request</a>
+        <iframe data-tally-src="https://tally.so/embed/1AarE1?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+          loading="lazy" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0"
+          title="Commission request form" style="min-height:500px;"></iframe>
       </div>
 
       <div class="ticket-stub">
@@ -852,4 +850,18 @@
       });
     });
   })();
+</script>
+
+<!-- Tally form embed loader (Commission page) -->
+<script>
+  var d = document, w = "https://tally.so/widgets/embed.js",
+  v = function () {
+    "undefined" != typeof Tally ? Tally.loadEmbeds() :
+    d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function (e) { e.src = e.dataset.tallySrc; });
+  };
+  if ("undefined" != typeof Tally) v();
+  else if (d.querySelector('script[src="' + w + '"]') == null) {
+    var s = d.createElement("script");
+    s.src = w; s.onload = v; s.onerror = v; d.body.appendChild(s);
+  } else v();
 </script>
