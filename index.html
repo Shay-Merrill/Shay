@@ -1,4 +1,5 @@
 <!doctype html>
+<meta charset="utf-8">
 <title>Shays Designs</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
@@ -89,6 +90,7 @@
     transition: border-color 0.15s ease;
   }
   .cart-btn:hover, .cart-btn:focus-visible { border-color: var(--ink); }
+  .mobile-cart-link { display: none; }
   .cart-count { font-size: 12px; background: var(--ink); color: var(--bg); padding: 1px 7px; border-radius: 999px; }
   .nav-toggle {
     display: none; width: 40px; height: 40px; padding: 0; background: none; border: 1px solid var(--line);
@@ -114,8 +116,8 @@
 
   /* HERO */
   .hero {
-    display: grid; grid-template-columns: 1fr 1.05fr; gap: 48px; align-items: center;
-    padding: 72px 0 72px; max-width: 100%;
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: 48px; align-items: center;
+    padding: 72px 40px; max-width: 100%;
   }
   .hero-text { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; min-width: 0; }
   .hero h1 { font-size: clamp(44px, 5.4vw, 76px); line-height: 0.98; font-weight: 400; }
@@ -123,10 +125,10 @@
   .hero-tags .tag-pill { text-align: center; }
   .hero p.lede { max-width: 42ch; color: var(--ink-soft); font-size: 16px; margin: 4px 0 4px; }
   .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
-  .hero-photo-block { display: flex; align-items: flex-end; gap: 20px; min-width: 0; }
+  .hero-photo-block { display: flex; align-items: flex-end; justify-content: center; gap: 20px; min-width: 0; }
   .proof-frame {
     position: relative; border: 1px solid var(--line); background: var(--surface);
-    aspect-ratio: 4 / 5; flex: 1 1 0; min-width: 0; overflow: hidden; border-radius: 220px 220px 24px 24px;
+    aspect-ratio: 4 / 5; flex: 1 1 0; min-width: 0; max-width: 340px; overflow: hidden; border-radius: 220px 220px 24px 24px;
   }
   .proof-frame img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; }
   .hero-stats {
@@ -235,6 +237,31 @@
   .cart-summary-row.total { font-size: 16px; font-weight: 500; border-top: 1px solid var(--line); padding-top: 10px; }
   .cart-empty { padding: 64px 0; text-align: center; color: var(--ink-soft); }
   .cart-empty a { color: var(--ink); text-decoration: underline; }
+
+  /* QUICK VIEW MODAL */
+  .card { cursor: pointer; }
+  .quickview-backdrop {
+    display: none; position: fixed; inset: 0; background: oklch(15% 0.01 85 / 0.5);
+    z-index: 100; align-items: center; justify-content: center; padding: 24px;
+  }
+  .quickview-backdrop.open { display: flex; }
+  .quickview-panel {
+    position: relative; background: #fff; border: 12px solid #fff; box-shadow: 0 0 0 1px var(--line);
+    max-width: 640px; width: 100%; max-height: 90vh; overflow-y: auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+  .quickview-art { background: var(--surface); aspect-ratio: 4/5; }
+  .quickview-art svg { width: 100%; height: 100%; display: block; }
+  .quickview-info { padding: 32px; display: flex; flex-direction: column; }
+  .quickview-close {
+    position: absolute; top: 22px; right: 22px; width: 32px; height: 32px;
+    border: none; background: var(--bg); border: 1px solid var(--line); cursor: pointer;
+    font-size: 18px; line-height: 1; color: var(--ink); z-index: 1;
+  }
+  @media (max-width: 600px) {
+    .quickview-panel { grid-template-columns: 1fr; }
+    .quickview-art { aspect-ratio: 1 / 1; }
+  }
   .upload {
     border: 1px dashed var(--line); padding: 26px; text-align: center;
     font-size: 13px; color: var(--ink-soft);
@@ -290,9 +317,10 @@
     .hero-tags { justify-content: center; }
     .hero p.lede { margin-left: auto; margin-right: auto; }
     .hero-actions { justify-content: center; }
-    .hero-photo-block { flex-direction: column; align-items: center; }
-    .proof-frame { width: 100%; max-width: 320px; }
+    .hero-photo-block { flex-direction: column; align-items: center; justify-content: center; }
+    .proof-frame { width: 100%; max-width: 320px; flex: none; }
     .hero-stats { flex-direction: row; width: auto; padding-bottom: 0; }
+    .btn-circle { width: 92px; height: 92px; font-size: 11px; }
     .grid { grid-template-columns: repeat(2, 1fr); }
     .colophon { grid-template-columns: repeat(2, 1fr); }
     .colophon div:nth-child(3) { border-left: none; }
@@ -315,6 +343,8 @@
     nav.links a[aria-current="page"] { color: var(--accent); }
     .nav-toggle { display: flex; }
     .pill { display: none; }
+    .cart-btn { display: none; }
+    .mobile-cart-link { display: flex; align-items: center; gap: 8px; }
   }
 
   @media (max-width: 520px) {
@@ -331,7 +361,7 @@
   .page { display: none; }
   .page.active { display: block; }
   .page-head {
-    padding: 56px 0 0;
+    padding-top: 56px;
   }
   .page-head p.lede { color: var(--ink-soft); max-width: 56ch; margin: 16px 0 0; font-size: 15px; }
   .chips { display: flex; gap: 10px; flex-wrap: wrap; padding: 32px 0 0; }
@@ -352,6 +382,7 @@
       <a href="#" data-goto="shop" data-nav>Shop</a>
       <a href="#" data-goto="commission" data-nav>Commission</a>
       <a href="#" data-goto="about" data-nav>About</a>
+      <a href="#" data-goto="cart" data-nav class="mobile-cart-link">Cart <span class="cart-count mono" id="cart-count-mobile">0</span></a>
     </nav>
     <button class="cart-btn" data-goto="cart" aria-label="View cart">
       Cart <span class="cart-count mono" id="cart-count">0</span>
@@ -404,7 +435,7 @@
 
   <div class="wrap">
     <div class="teaser-row">
-      <h2 class="display" style="font-size:clamp(24px,2.6vw,32px);">A few recent pieces</h2>
+      <h2 class="display" style="font-size:clamp(24px,2.6vw,32px);">Customer favorites</h2>
       <a href="#" class="more" data-goto="shop">view the full shop &rarr;</a>
     </div>
     <div class="grid">
@@ -481,7 +512,6 @@
   <div class="wrap page-head">
     <div class="eyebrow">Print shop</div>
     <h1 class="display" style="font-size:clamp(32px,4vw,48px); margin-top:12px;">Prints ready to ship, art made to order</h1>
-    <p class="lede">Every design starts as an original hand-drawn piece, then printed on demand through an ethical print partner — no held inventory, no waste.</p>
     <div class="chips">
       <button class="chip" aria-pressed="true">All</button>
       <button class="chip" aria-pressed="false">Nature &amp; botanical</button>
@@ -491,6 +521,8 @@
       <button class="chip" aria-pressed="false">Digital downloads</button>
     </div>
   </div>
+
+  <div class="wrap" style="margin-top:48px;"><div style="border-top:1px solid var(--line);"></div></div>
 
   <div class="wrap" style="padding-top:48px; padding-bottom:96px;">
     <div class="grid">
@@ -691,6 +723,23 @@
 
 </main>
 
+<div class="quickview-backdrop" id="quickview" aria-hidden="true">
+  <div class="quickview-panel" role="dialog" aria-modal="true" aria-labelledby="qv-title">
+    <button class="quickview-close" id="qv-close" aria-label="Close">&times;</button>
+    <div class="quickview-art" id="qv-art"></div>
+    <div class="quickview-info">
+      <span class="edition mono" id="qv-edition" style="position:static; display:inline-block; margin-bottom:12px;"></span>
+      <h3 class="display" id="qv-title" style="font-size:26px;"></h3>
+      <div class="card-size" id="qv-size" style="margin-top:8px;"></div>
+      <p id="qv-desc" style="color:var(--ink-soft); font-size:14px; margin-top:16px; max-width:36ch;"></p>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:24px;">
+        <span class="price" id="qv-price" style="font-size:20px;"></span>
+        <button class="btn btn-primary" id="qv-add">Add to cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="wrap foot-row">
     <div>&copy; Shays Designs</div>
@@ -745,9 +794,60 @@
       renderCartCount();
     }
 
+    // --- QUICK VIEW ---
+    var quickview = document.getElementById('quickview');
+    var qvCurrent = null;
+
+    function openQuickView(card) {
+      var title = card.querySelector('.card-title').textContent.trim();
+      var size = card.querySelector('.card-size').textContent.trim();
+      var price = parseFloat(card.querySelector('.price').textContent.replace('$', ''));
+      var editionEl = card.querySelector('.edition');
+      var svg = card.querySelector('.card-art svg');
+
+      qvCurrent = { title: title, size: size, price: price };
+
+      document.getElementById('qv-title').textContent = title;
+      document.getElementById('qv-size').textContent = size;
+      document.getElementById('qv-price').textContent = money(price);
+      document.getElementById('qv-edition').textContent = editionEl ? editionEl.textContent.trim() : '';
+      document.getElementById('qv-desc').textContent = 'A hand-drawn original, printed on demand — no held inventory, no waste. Ships worldwide in 5–10 business days.';
+
+      var artHost = document.getElementById('qv-art');
+      artHost.innerHTML = '';
+      if (svg) artHost.appendChild(svg.cloneNode(true));
+
+      quickview.classList.add('open');
+      quickview.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeQuickView() {
+      quickview.classList.remove('open');
+      quickview.setAttribute('aria-hidden', 'true');
+      qvCurrent = null;
+    }
+
+    document.getElementById('qv-close').addEventListener('click', closeQuickView);
+    quickview.addEventListener('click', function (e) {
+      if (e.target === quickview) closeQuickView();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && quickview.classList.contains('open')) closeQuickView();
+    });
+    document.getElementById('qv-add').addEventListener('click', function () {
+      if (!qvCurrent) return;
+      addToCart(qvCurrent.title, qvCurrent.size, qvCurrent.price);
+      var btn = document.getElementById('qv-add');
+      var original = btn.textContent;
+      btn.textContent = 'Added';
+      setTimeout(function () { btn.textContent = original; }, 900);
+    });
+
     function renderCartCount() {
       var count = cart.reduce(function (sum, i) { return sum + i.qty; }, 0);
       document.getElementById('cart-count').textContent = count;
+      var mobileCount = document.getElementById('cart-count-mobile');
+      if (mobileCount) mobileCount.textContent = count;
     }
 
     function cartTotal() {
@@ -794,6 +894,11 @@
         var original = addBtn.textContent;
         addBtn.textContent = 'Added';
         setTimeout(function () { addBtn.textContent = original; }, 900);
+        return;
+      }
+      var card = e.target.closest('.card');
+      if (card) {
+        openQuickView(card);
         return;
       }
       var qtyBtn = e.target.closest('[data-qty]');
