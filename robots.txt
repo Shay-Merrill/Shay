@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://shays-designs.vercel.app/sitemap.xml
